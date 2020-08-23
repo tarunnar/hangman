@@ -15,29 +15,39 @@ with open("sample.csv") as sample:
         tmp.append((quote, pos))
 
 game_incorrect_threshold = 6
-while True:
+print("Do you want to start the game y for  y n for no:", end=" ")
+choice = input()
+while choice == 'y':
     elem = random.choice(tmp)
     quote = elem[0]
+
     pos = elem[1]
+
     state = ['_' for c in quote]
 
     flag = False
     correct_guesses = []
     incorrect_guesses = []
     correct_chars = 0
+    set_guesed = set()
     while not flag:
         print("guess a character")
         c = input()
 
         if c in pos:
+            if c in set_guesed:
+                continue
             correct_guesses.append(c)
             indexes = pos[c]
             for index in indexes:
                 correct_chars += 1
                 state[index] = str(c)
+            set_guesed.add(c)
+            print(state, correct_chars)
+
             if correct_chars == len(state):
-                print("congates you guessed the name correctly")
-                flag = False
+                print("congrates you guessed the name correctly")
+                flag = True
                 continue
             print("good")
             for c in state:
@@ -45,19 +55,20 @@ while True:
             print()
             print("correct_guesses", correct_guesses)
             print("incorrect_guesses", incorrect_guesses)
-            print("chances {}/{}".format(incorrect_guesses, game_incorrect_threshold))
+            print("chances {}/{}".format(len(incorrect_guesses), game_incorrect_threshold))
         else:
             incorrect_guesses.append(c)
             if len(incorrect_guesses) == game_incorrect_threshold:
                 print("You loose")
-                flag = False
+                flag = True
             print("Nope")
             print()
             print("correct_guesses", correct_guesses)
             print("incorrect_guesses", incorrect_guesses)
             print("chances {}/{}".format(incorrect_guesses, game_incorrect_threshold))
 
-    print("do you want to quit the game enter q for quit n for no:", end="")
+    print("do you want to continue the game enter y for quit n for no:", end="")
     choice = input()
-    if choice == 'q':
-        flag = True
+    if choice == 'n':
+        break
+
